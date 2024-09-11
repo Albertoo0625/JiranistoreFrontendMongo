@@ -25,7 +25,7 @@ export default function CheckoutPage() {
     const [amount, setAmount] = useState('');
     const [errMsg, setErrMsg] = useState('');
     const [phone, setPhone] = useState('');
-    const [address, setAddress] = useState('');
+    const [address, setAddress] = useState('Nairobi');
     const [phoneValid, setPhoneValid] = useState(false);
 
 
