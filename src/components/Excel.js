@@ -14,7 +14,7 @@ function Exportexcel(props) {
     getProductsData();
 
     console.log(productsData);
- },[productsData,getExcelData]);
+ },[]);
 
 
 

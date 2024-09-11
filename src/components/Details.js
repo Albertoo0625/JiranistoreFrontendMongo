@@ -1,14 +1,22 @@
-import React, { Component } from "react";
+import React, { Component, useEffect } from "react";
 import { ProductConsumer } from "../context";
 import { ButtonContainer } from "./Button";
 import { Link } from "react-router-dom";
 export default class Details extends Component {
+  state={
+    detailProduct:[]
+  }
+  async componentDidMount(){
+    let detailProduct = JSON.parse(localStorage.getItem("detailProduct"));
+    if (detailProduct) {
+      this.setState({detailProduct});
+    }
+  }
   render() {
     return (
       <ProductConsumer>
-        {(value) => {
-          const detailProduct = JSON.parse(localStorage.getItem("detailProduct"));
-          const {id,company,img,info,price,title,inCart} = detailProduct;
+        {(value) => {  
+          const {id,company,img,info,price,title,inCart} = this.state.detailProduct;
           return (
             <div className="container py-5">
               {/* title */}

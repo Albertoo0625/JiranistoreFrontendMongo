@@ -21,7 +21,7 @@ function SearchForm(props) {
           value={query}
           onChange={(event) => setQuery(event.target.value)}
         />
-        <button type="submit" ><i class="fa fa-search"></i></button>
+        <button type="submit" ><i className="fa fa-search"></i></button>
       </div>
     </form>
   );

@@ -685,7 +685,6 @@ class ProductProvider extends Component {
       this.setState({ cartTax });
     }
   
-
     const cartTotal = JSON.parse(localStorage.getItem('cartTotal'));
     if (cartTotal) {
       this.setState({ cartTotal });
@@ -698,25 +697,23 @@ class ProductProvider extends Component {
 
   const detailProduct = JSON.parse(localStorage.getItem("detailProduct"));
   if (detailProduct) {
-    this.setState(detailProduct);
+    this.setState({detailProduct});
   }
 
 
-  // this.getPendingProducts();
+  this.getPendingProducts();
 
   // this.postingPendingProducts();
 
-  // this.getUserDetails();
+  this.getUserDetails();
 
-  this.handleDetail();
+  // this.handleDetail();
 
   console.log(this.state.userDetails);
 
   console.log(this.state.detailProduct);
 
-  this.getExcelData('/products');
-
- 
+  // this.getExcelData('/products');
 }
 
 // componentWillUnmount() {
@@ -774,6 +771,7 @@ setProducts= async(storeProducts)=>{
   // };
   
   addToCart = async (id) => {
+    console.log(`id from cart item ${id}`);
     let tempProducts = [...this.state.products];
     const index = tempProducts.indexOf(this.getItem(id));
     const product = tempProducts[index];
@@ -817,7 +815,8 @@ setProducts= async(storeProducts)=>{
     for (const [key, value] of Object.entries(product)) {
       if (key.startsWith("product_")) {
         productWithoutPrefix[key.substring(8)] = value;
-      } else {
+      } 
+      else {
         productWithoutPrefix[key] = value;
       }
     }
@@ -827,25 +826,25 @@ setProducts= async(storeProducts)=>{
 console.log(productsWithoutPrefix);
 console.log(`PRODUCT ${JSON.stringify(product)}`);
 
-
-
-
 const arr = productsWithoutPrefix
-
 const obj = { ...arr[0] };
 console.log(product);
 console.log(`OBJ ${JSON.stringify(obj)}`);
+// const updatedCart = [...this.state.cart, obj];
 
 this.state.cart=[...this.state.cart,obj];
- this.setState(() => {
+
+ this.setState(async() => {
      return {
     products: [...tempProducts],
-    cart:this.state.cart,
-    detailProduct: {product}
+    cart: this.state.cart,
+    detailProduct: {product},
      }
   },
     ()=>{
-      this.addTotals()} 
+    this.addTotals();
+    console.log(`Get Cart ${this.state.cart}`);
+    } 
     );
     console.log(`CART ${JSON.stringify(this.state.cart)}`)
     localStorage.setItem('cart', JSON.stringify(this.state.cart));
@@ -984,8 +983,6 @@ this.state.cart=[...this.state.cart,obj];
           
           })
         })
-
-
       return {cart:[]};
     },()=>{
       this.setProducts(this.state.products);
@@ -1223,13 +1220,18 @@ getExcelData=async(url)=>{
 
 
   MakeSeller=async(id)=>{
-    const roles={"User":2001,"Editor":1984}
-    const user=await axiosPrivate.put(`http://localhost:3500/auth/${id}`,{roles},{
-      headers:{
-        "Content-Type":"application/json",
-      },
-      withCredentials:true,
-    })
+    try{
+      const roles={"User":2001,"Editor":1984}
+      const user=await axiosPrivate.put(`http://localhost:3500/auth/${id}`,{roles},{
+        headers:{
+          "Content-Type":"application/json",
+        },
+        withCredentials:true,
+      })
+    }catch(e){
+      console.log(`Error making seller ${e.message}`)
+    }
+   
   }
 
 updatePendingProductApprovalStatus=async(id)=>{
