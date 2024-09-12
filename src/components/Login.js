@@ -37,7 +37,7 @@ const Login = () => {
         e.preventDefault();
         
         try {
-            
+            setIsloading(true);
             const response = await axios.post(LOGIN_URL,
                 JSON.stringify({ user, pwd }),
                 {
@@ -46,7 +46,7 @@ const Login = () => {
                 }
             );
 
-            setIsloading(true);
+            
 
             console.log(response.data);
             const accessToken = response?.data?.accessToken;
