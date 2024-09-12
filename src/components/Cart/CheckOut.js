@@ -9,14 +9,11 @@ const phoneRegex = /^(07)[0-9]{8}$/;
 const STK_URL = '/stk';
 export default function CheckoutPage() {
       const phoneRef=useRef();
-      const errRef=useRef();
-      
-     const {auth}=useContext(AuthContext);
+      const errRef=useRef();    
+      const {auth}=useContext(AuthContext);
 
-     console.log(JSON.stringify(auth?.accessToken));
+      console.log(JSON.stringify(auth?.accessToken));
      
-      
-
       useEffect(() => {
         phoneRef.current.focus();
     }, []);

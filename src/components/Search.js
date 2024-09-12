@@ -1,16 +1,18 @@
 import { useState } from 'react';
 import './search.css'
+
 function SearchForm(props) {
   const [query, setQuery] = useState('');
   const {search}=props
+
 
   const handleSearch = (event) => {
     event.preventDefault();
     // Do something with the search query
     console.log(query);
-    search(query)
-    
+    search(query) 
   };
+
 
   return (
     <form onSubmit={handleSearch}>

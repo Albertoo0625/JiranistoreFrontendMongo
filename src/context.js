@@ -619,8 +619,6 @@
 import React, { Component} from 'react';
 import {axiosPrivate} from './api/axios';
 
-
-
 const ProductContext=React.createContext();
 class ProductProvider extends Component {
 
@@ -1182,6 +1180,33 @@ postingPendingProducts=async(id)=>{
   }
 
   search=async(query)=>{
+
+    if(query==null || query==''){
+      const response = await axiosPrivate.get("/products", {
+        headers: {"Content-Type": "application/json"},
+        withCredentials: true
+      });
+  
+      console.log(response.data)
+    
+      const productsWithoutPrefix = response.data.map(product => {
+        const productWithoutPrefix = {};
+        for (const [key, value] of Object.entries(product)) {
+          if (key.startsWith("product_")) {
+            productWithoutPrefix[key.substring(8)] = value;
+          } else {
+            productWithoutPrefix[key] = value;
+          }
+        }
+        return productWithoutPrefix;
+      });
+  
+      this.setState(() => {
+        return { products: productsWithoutPrefix };
+      }, () => {
+        console.log(this.state.products);
+      });
+    }
     const response=await axiosPrivate.get(`/products/search/${query}`,{
       headers:{"Content-Type": "application/json"},
       withCredentials:true,

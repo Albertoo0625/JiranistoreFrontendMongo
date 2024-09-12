@@ -5,6 +5,7 @@ import useInput from '../hooks/useInput';
 import useToggle from '../hooks/useToggle';
 
 import axios from '../api/axios';
+import LoadingSpinner from './LoadingSpinner';
 const LOGIN_URL = '/auth';
 
 const Login = () => {
@@ -22,6 +23,8 @@ const Login = () => {
     const [errMsg, setErrMsg] = useState('');
     const [check, toggleCheck] = useToggle('persist', false);
 
+    const [isLoading,setIsloading]= useState(false);
+
     useEffect(() => {
         userRef.current.focus();
     }, [])
@@ -32,8 +35,9 @@ const Login = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-
+        
         try {
+            
             const response = await axios.post(LOGIN_URL,
                 JSON.stringify({ user, pwd }),
                 {
@@ -42,11 +46,14 @@ const Login = () => {
                 }
             );
 
+            setIsloading(true);
+
             console.log(response.data);
             const accessToken = response?.data?.accessToken;
             const roles = response?.data?.roles;
             console.log(`LOGIN ROLES${roles}`);
             setAuth({ user, pwd, roles, accessToken });
+            setIsloading(false);
             resetUser();
             setPwd('');
             if (from === '/login') {
@@ -70,8 +77,8 @@ const Login = () => {
     }
 
     return (
-
-        <section>
+        isLoading? <LoadingSpinner/> :
+        <section>   
             <p ref={errRef} className={errMsg ? "errmsg" : "offscreen"} aria-live="assertive">{errMsg}</p>
             <h1>Sign In</h1>
             <form onSubmit={handleSubmit}>
@@ -111,7 +118,6 @@ const Login = () => {
                 </span>
             </p>
         </section>
-
     )
 }
 
